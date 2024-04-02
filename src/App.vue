@@ -2,6 +2,10 @@
 import Trx from '@ledgerhq/hw-app-trx';
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
 import TronWeb from 'tronweb';
+window.TronWeb = TronWeb;
+window.Trx = Trx;
+window.TransportWebHID = TransportWebHID;
+
 // construct you typedData
 // you can change the data to test other cases
 const domain = {
@@ -52,10 +56,11 @@ async function handleSign() {
 
   // request Ledger to sign TIP712HashedMessage
   const signature = await app.signTIP712HashedMessage(path, hashedMessage.slice(2), dominSeperator.slice(2));
-  await this.transport?.close();
+  console.log('Signed signature: ', signature);
+  await transport?.close();
 
   // verify signature
-  const result = TronWeb.Trx.verifyTypedData(domain, types, value, signature, address);
+  const result = TronWeb.Trx.verifyTypedData(domain, types, value, signature, address.address);
   console.log('verify result: ', result);
 }
 </script>
