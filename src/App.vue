@@ -2,6 +2,7 @@
 import Trx from '@ledgerhq/hw-app-trx';
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
 import TronWeb from 'tronweb';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 window.TronWeb = TronWeb;
 window.Trx = Trx;
 window.TransportWebHID = TransportWebHID;
@@ -63,11 +64,20 @@ async function handleSign() {
   const result = TronWeb.Trx.verifyTypedData(domain, types, value, signature, address.address);
   console.log('verify result: ', result);
 }
+async function handleSignWithTronLink() {
+  const adapter = new TronLinkAdapter({ checkTimeout: 1000 });
+  await adapter.connect();
+  const signature = await window.tronWeb.trx._signTypedData(domain, types, value);
+  console.log('Signed signature: ', signature);
+  const result = TronWeb.Trx.verifyTypedData(domain, types, value, signature, adapter.address);
+  console.log('verify result: ', result);
+}
 </script>
 
 <template>
   <div>
     <button @click="handleSign">sign and verify</button>
+    <button @click="handleSignWithTronLink">sign and verify With TronLink Ledger Account</button>
   </div>
 </template>
 
