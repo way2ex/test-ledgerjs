@@ -55,7 +55,7 @@ async function handleSign() {
   console.log('Your address is: ', address);
 
   // request Ledger to sign TIP712HashedMessage
-  const signature = await app.signTIP712HashedMessage(path, hashedMessage.slice(2), dominSeperator.slice(2));
+  const signature = await app.signTIP712HashedMessage(path, dominSeperator.slice(2), hashedMessage.slice(2));
   console.log('Signed signature: ', signature);
   await transport?.close();
 
